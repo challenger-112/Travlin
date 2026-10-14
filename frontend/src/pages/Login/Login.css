@@ -1,0 +1,270 @@
+.login-button {
+  display: flex;
+  align-items: center;
+  padding: 6px 14px;
+  background-color: #3498db;
+  color: white;
+  font-size: 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #2980b9;
+}
+
+.page-logo-img {
+  height: 30px;
+  width: 30px;
+  object-fit: contain;
+}
+
+.page-logo-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+/* ✅ Blur effect when modal is open */
+.blur-background {
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+/* Modal layout: side-by-side */
+/* ✅ Modal overlay: full-screen + center the popup */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px; /* for small screens */
+  box-sizing: border-box;
+}
+
+/* ✅ Modal layout (the box) stays centered */
+.modal-layout {
+  background: white;
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+
+/* Left section */
+.modal-left {
+  background: #084e7c;
+  color: white;
+  padding: 40px 30px;
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.modal-logo {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.modal-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Right section */
+.modal-right {
+  width: 55%;
+  padding: 40px 30px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Shared fields styling */
+.modal-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-section h2 {
+  margin-bottom: 2px;
+  text-align: center;
+}
+
+.modal-section h4 {
+  margin-bottom: 15px;
+  margin-top: 0;
+  text-align: center;
+}
+
+.modal-section input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.modal-section button {
+  padding: 10px;
+  background-color: #0e74b8;
+;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.modal-section button:hover {
+  background-color: #09335f;
+}
+
+/* Close button (top-right inside modal box) */
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 22px;
+  color: #555;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Switch text under form */
+.switch-text {
+  font-size: 10px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.link-class {
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+  font-style: italic;
+  font-weight: 500;
+  text-decoration: solid;
+  text-decoration: underline;
+}
+
+.switch-link {
+  color: #007bff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.switch-link:hover {
+  text-decoration: underline;
+}
+
+/* ✅ Smooth fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1200px) {
+  .slider-container {
+    height: 420px;
+  }
+
+  .top-right-logo {
+    padding: 10px 14px;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .slider-container {
+    margin-top: 90px;
+    height: 380px;
+  }
+
+  .top-right-logo {
+    display: none;
+  }
+
+  .top-right-logo {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: auto;
+  }
+
+  .modal-layout {
+    flex-direction: column;
+    max-width: 95vw;
+    width: 100%;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+  }
+
+  .modal-left,
+  .modal-right {
+    width: 96%;
+    padding: 22px;
+  }
+
+  .modal-right {
+    padding-top: 20px;
+  }
+
+  .modal-close {
+    top: 12px;
+    right: 14px;
+  }
+
+  .modal-section input,
+  .modal-section button {
+    width: 98%;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-left,
+  .modal-right {
+    width: 88%;
+    padding: 22px;
+  }
+
+  .modal-section input{
+    width: 90%;
+  }
+  .modal-section button{
+    width: 85%;
+    margin-left: 20px;
+  }
+
+  .slider-container {
+    margin-top: 88px;
+    height: 320px;
+  }
+}
+
+@media (max-width: 480px) {
+  .slider-container {
+    margin-top: 78px;
+    height: 280px;
+  }
+}

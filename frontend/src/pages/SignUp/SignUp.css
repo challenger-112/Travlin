@@ -1,0 +1,193 @@
+.signup-page .modal-overlay {
+  position: fixed;
+  inset: 0;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.signup-page .modal-layout {
+  box-sizing: border-box;
+  display: flex;
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px);
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.signup-page .modal-left,
+.signup-page .modal-right {
+  box-sizing: border-box;
+}
+
+.signup-page .modal-left {
+  flex: 0 0 45%;
+  padding: 40px 30px;
+  background: #084e7c;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.signup-page .modal-logo {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.signup-page .modal-title {
+  margin-bottom: 15px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.signup-page .modal-right {
+  flex: 1;
+  min-width: 0;
+  padding: 40px 30px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.signup-page .modal-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.signup-page .modal-section h2 {
+  margin-bottom: 2px;
+  text-align: center;
+}
+
+.signup-page .modal-section input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.signup-page .modal-section input:focus {
+  border-color: #0e74b8;
+  outline: 2px solid rgba(14, 116, 184, 0.2);
+}
+
+.signup-page .modal-section button {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  background-color: #0e74b8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.signup-page .modal-section button:hover {
+  background-color: #09335f;
+}
+
+.signup-page .modal-section button:focus-visible,
+.signup-page .modal-close:focus-visible,
+.signup-page .link-class:focus-visible {
+  outline: 2px solid #0e74b8;
+  outline-offset: 3px;
+}
+
+.signup-page .modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.signup-page .switch-text {
+  margin-top: 10px;
+  font-size: 10px;
+  text-align: center;
+}
+
+.signup-page .link-class {
+  margin-top: 10px;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .signup-page .modal-layout {
+    flex-direction: column;
+    max-width: 95vw;
+    overflow-y: auto;
+  }
+
+  .signup-page .modal-left,
+  .signup-page .modal-right {
+    flex: none;
+    width: 100%;
+    padding: 22px;
+  }
+
+  .signup-page .modal-right {
+    padding-top: 20px;
+  }
+
+  .signup-page .modal-close {
+    top: 12px;
+    right: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-page .modal-overlay {
+    padding: 12px;
+  }
+
+  .signup-page .modal-layout {
+    max-width: 100%;
+    max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - 24px);
+  }
+
+  .signup-page .modal-left,
+  .signup-page .modal-right {
+    padding: 18px;
+  }
+
+  .signup-page .modal-right {
+    padding-top: 24px;
+  }
+
+  .signup-page .modal-section button {
+    width: 87%;
+  }
+}
