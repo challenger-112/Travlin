@@ -29,6 +29,7 @@ ALLOWED_HOSTS = [
     "192.168.1.54",
     "127.0.0.1",
     "localhost",
+    "travlin-virid.vercel.app",
 ]
 
 
