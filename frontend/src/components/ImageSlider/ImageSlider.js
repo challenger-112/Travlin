@@ -12,8 +12,14 @@ import image5 from '../../assets/images/5.jpg';
 
 const images = [image1, image2, image3, image4, image5];
 
+const getActiveUsername = () => {
+  const isLoggedIn = localStorage.getItem('access_token') && localStorage.getItem('refresh_token');
+  return isLoggedIn ? localStorage.getItem('username') || '' : '';
+};
+
 const ImageSlider = () => {
   const [current, setCurrent] = useState(0);
+  const [username, setUsername] = useState(getActiveUsername);
   const [isTablet, setIsTablet] = useState(() => (typeof window !== 'undefined' ? window.innerWidth > 768 && window.innerWidth <= 1024 : false));
   const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth <= 768 : false));
 
@@ -27,6 +33,16 @@ const ImageSlider = () => {
   }, []);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const updateUsername = () => setUsername(getActiveUsername());
+    window.addEventListener('auth-session-updated', updateUsername);
+    window.addEventListener('storage', updateUsername);
+    return () => {
+      window.removeEventListener('auth-session-updated', updateUsername);
+      window.removeEventListener('storage', updateUsername);
+    };
+  }, []);
 
   // ========== SCREEN SIZE EFFECTS ==========
   useEffect(() => {
@@ -49,8 +65,11 @@ const ImageSlider = () => {
           <img src={logo} alt="Logo" className="page-logo-img" />
           <span className="page-logo-text">Travलिन</span>
           {!isMobile && !isTablet && (
-            <button className="login-button" onClick={() => navigate("/login")}>
-              <FaUser style={{ marginRight: "6px" }} /> Login / Signup
+            <button
+              className="login-button"
+              onClick={() => navigate(username ? "/profile" : "/login")}
+            >
+              <FaUser style={{ marginRight: "6px" }} /> {username || "Login / Signup"}
             </button>
           )}
         </div>

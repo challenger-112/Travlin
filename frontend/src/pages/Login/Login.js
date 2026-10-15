@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import logo from '../../assets/images/logo.png';
 import { useNavigate } from "react-router-dom";
+import API from '../../services/api';
 import './Login.css';
 
 function Login() {
@@ -21,38 +22,27 @@ function Login() {
     }
 
     try {
-      const response = await fetch(
-      // "http://127.0.0.1:8000/api/login/",
-        "http://192.168.1.54:8000/api/login/",
-        {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-              username: username,
-              password: password
-          })
-        }
-    );
+      const { data } = await API.post("login/", {
+        username,
+        password,
+      });
 
-    const data = await response.json();
-
-    if (response.ok) {
         alert("Login Successful");
 
-        // If Django returns a JWT token
+        localStorage.setItem("username", data.user.username);
         localStorage.setItem("access_token", data.access);
         localStorage.setItem("refresh_token", data.refresh);
+        window.dispatchEvent(new Event("auth-session-updated"));
+        window.dispatchEvent(new Event("auth-token-updated"));
 
         navigate("/");
-    } else {
-        alert(data.message || "Invalid username or password");
-    }
-
     } catch (error) {
         console.error("Login error:", error);
-        alert("Unable to connect to server");
+        alert(
+          error.response?.data?.message ||
+          error.response?.data?.detail ||
+          "Unable to connect to server"
+        );
     }
   };
 

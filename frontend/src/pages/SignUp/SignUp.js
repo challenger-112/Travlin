@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import logo from '../../assets/images/logo.png';
 import { useNavigate } from "react-router-dom";
 import './SignUp.css';
@@ -9,10 +9,11 @@ function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirm_password, setConfirmPassword] = useState("");
 
   const handleSignup = async () => {
 
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !confirm_password) {
         alert("Please fill all fields");
         return;
     }
@@ -28,7 +29,8 @@ function SignUp() {
             body: JSON.stringify({
                 username,
                 email,
-                password
+                password,
+                confirm_password
             })
         }
     );
@@ -65,6 +67,7 @@ function SignUp() {
                 <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
                 <input type="text" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <input type="password" placeholder="Confirm Password" value={confirm_password} onChange={(e) => setConfirmPassword(e.target.value)} />
                 <button onClick={handleSignup}>Signup</button>
                 <p className="switch-text">Already have an account?{' '}
                     <span onClick={() => navigate('/login')} className="link-class">Login here</span>

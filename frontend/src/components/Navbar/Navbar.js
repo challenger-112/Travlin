@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Navbar.css';
 import { FaHome, FaRegNewspaper, FaMapMarkedAlt, FaBookOpen, FaImages, FaInfoCircle, FaEnvelope, FaComments, FaChevronLeft, FaChevronRight, FaBars, FaUser} from 'react-icons/fa';
 import logo from '../../assets/images/logo.png';
@@ -9,8 +9,27 @@ function Navbar() {
     const [activeIndex, setActiveIndex] = useState(0); // ✅ Track active nav item
     const [isTablet, setIsTablet] = useState(() => (typeof window !== 'undefined' ? window.innerWidth > 768 && window.innerWidth <= 1024 : false));
     const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth <= 768 : false));
+    const [username, setUsername] = useState(() => (
+        localStorage.getItem('access_token') && localStorage.getItem('refresh_token')
+            ? localStorage.getItem('username') || ''
+            : ''
+    ));
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const updateUsername = () => {
+            const isLoggedIn = localStorage.getItem('access_token') && localStorage.getItem('refresh_token');
+            setUsername(isLoggedIn ? localStorage.getItem('username') || '' : '');
+        };
+
+        window.addEventListener('auth-session-updated', updateUsername);
+        window.addEventListener('storage', updateUsername);
+        return () => {
+            window.removeEventListener('auth-session-updated', updateUsername);
+            window.removeEventListener('storage', updateUsername);
+        };
+    }, []);
 
     const navItems = [
         { icon: <FaHome />, label: 'Home', target: 'home' },
@@ -24,8 +43,12 @@ function Navbar() {
     ];
 
     const mobileNavItems = [
-    ...navItems,
-    { icon: <FaUser />, label: 'Login', target: 'login' }
+        ...navItems,
+        {
+            icon: <FaUser />,
+            label: username || 'Login',
+            target: username ? 'profile' : 'login'
+        }
     ];
 
   const handleNavClick = (target, index) => {
@@ -37,9 +60,19 @@ function Navbar() {
         return;
     }
 
+    if (target === "profile") {
+        navigate("/profile");
+        return;
+    }
+
     if (target === 'home') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
+        if (window.location.pathname === '/') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        else {
+            navigate("/");
+        }
+        return;
     }
 
     const section = document.getElementById(target);
