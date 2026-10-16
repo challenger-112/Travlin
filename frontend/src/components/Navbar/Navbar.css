@@ -12,7 +12,7 @@
   justify-content: space-between;
   overflow-x: hidden;
   z-index: 1000;
-  border-radius: 10px;
+  border-radius: 0px;
 }
 
 .sidebar.collapsed {

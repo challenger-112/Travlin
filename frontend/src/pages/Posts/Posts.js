@@ -3,7 +3,6 @@ import "./Posts.css";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import API from "../../services/api";
-import { useNavigate } from "react-router-dom";
 
 const DEFAULT_PROFILE_PICTURE = "https://placehold.co/160x160?text=Profile";
 const EMPTY_PROFILE = {
@@ -23,13 +22,10 @@ export default function Post() {
 
 
   const [profile, setProfile] = useState(EMPTY_PROFILE);
-  const [draft, setDraft] = useState(EMPTY_PROFILE);
-  const [selectedPicture, setSelectedPicture] = useState(null);
   const [picturePreview, setPicturePreview] = useState("");
-  const [pictureError, setPictureError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [loadingPosts, setLoadingPosts] = useState(true);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
 
 
@@ -44,7 +40,6 @@ export default function Post() {
         if (isMounted) {
           const userProfile = { ...EMPTY_PROFILE, ...data };
           setProfile(userProfile);
-          setDraft(userProfile);
           setPicturePreview(userProfile.profile_picture || "");
         }
       } catch (requestError) {
@@ -59,6 +54,48 @@ export default function Post() {
     };
 
     loadProfile();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadPosts = async () => {
+      try {
+        const { data } = await API.get("posts/mine/");
+        if (isMounted) {
+          setPosts(data.map((post) => ({
+            id: post.id,
+            username: post.author || "Anonymous",
+            profilePic: "",
+            place: post.place,
+            caption: post.caption,
+            media: (post.media_items || []).map((item) => ({
+              url: item.url,
+              type: item.type,
+            })),
+            date: new Date(post.created_at).toLocaleDateString(),
+            likes: 0,
+          })));
+        }
+      } catch (requestError) {
+        console.error("Unable to load posts:", requestError);
+        if (isMounted) {
+          setError(
+            requestError.response?.data?.detail ||
+            "Unable to load your posts. Please try again."
+          );
+        }
+      } finally {
+        if (isMounted) {
+          setLoadingPosts(false);
+        }
+      }
+    };
+
+    loadPosts();
     return () => {
       isMounted = false;
     };
@@ -220,7 +257,9 @@ export default function Post() {
                 <span className="post-count">{posts.length} posts</span>
             </div>
 
-            {posts.length === 0 ? (
+            {loadingPosts ? (
+                <p className="profile-message">Loading your posts…</p>
+            ) : posts.length === 0 ? (
                 <div className="empty-state">
                 <div className="empty-icon">✧</div>
                 <h3>Your story starts here</h3>
@@ -244,7 +283,7 @@ export default function Post() {
                     <article className="post-card" key={post.id}>
                         <div className="post-card-header">
                         <img
-                            src={post.profilePic}
+                            src={post.profilePic || profile.profile_picture || DEFAULT_PROFILE_PICTURE}
                             alt={post.username}
                             className="post-avatar"
                         />

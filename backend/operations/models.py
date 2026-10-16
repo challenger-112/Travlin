@@ -1,11 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
+from accounts.models import UserProfile
 
 # Create your models here.
 class Post(models.Model):
     place = models.CharField(max_length=20)
     caption = models.TextField(max_length=100)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     size = models.IntegerField(default=0)
@@ -28,7 +28,7 @@ class PostMedia(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     content = models.TextField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -87,7 +87,7 @@ class Login(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        user_by_email = User.objects.filter(email__iexact=username_or_email).first()
+        user_by_email = UserRegistration.objects.filter(email__iexact=username_or_email).first()
         username = user_by_email.username if user_by_email else username_or_email
         user = authenticate(request, username=username, password=password)
 

@@ -65,6 +65,11 @@ function Navbar() {
         return;
     }
 
+    if (target === "posts") {
+        navigate("/allposts");
+        return;
+    }
+
     if (target === 'home') {
         if (window.location.pathname === '/') {
             window.scrollTo({ top: 0, behavior: 'smooth' });

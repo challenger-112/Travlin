@@ -163,16 +163,18 @@ function Profile() {
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
       localStorage.removeItem("username");
+      window.location.assign("/");
       window.dispatchEvent(new Event("auth-session-updated"));
-      navigate("/", { replace: true });
+      // navigate("/", { replace: true });
     } catch (requestError) {
       console.error("Unable to log out:", requestError);
       if (requestError.response?.status === 400 || requestError.response?.status === 401) {
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
         localStorage.removeItem("username");
+        window.location.assign("/");
         window.dispatchEvent(new Event("auth-session-updated"));
-        navigate("/", { replace: true });
+        // navigate("/", { replace: true });
       } else {
         setError("Unable to log out right now. Please try again.");
       }

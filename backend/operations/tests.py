@@ -9,7 +9,7 @@ from django.test import override_settings
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from accounts.models import UserSession
+from accounts.models import UserProfile, UserRegistration, UserSession
 from operations.models import Post
 
 
@@ -17,10 +17,17 @@ class JwtCommentTests(APITestCase):
     def setUp(self):
         cache.clear()
         self.user = User.objects.create_user(username="traveler", password="safe-password-123")
+        registration = UserRegistration.objects.create(
+            username=self.user.username,
+            email=self.user.email,
+            password="test-password",
+            confirm_password="test-password",
+        )
+        self.profile = UserProfile.objects.create(user=registration)
         self.post = Post.objects.create(
             place="Ladakh",
             caption="A trip to remember",
-            author=self.user,
+            author=self.profile,
         )
         self.session = UserSession.objects.create(user=self.user)
         refresh = RefreshToken.for_user(self.user)
@@ -43,12 +50,20 @@ class JwtCommentTests(APITestCase):
     def test_my_posts_only_returns_authenticated_users_posts(self):
         other_user = User.objects.create_user(
             username="other-traveler",
+            email="other-traveler@example.com",
             password="safe-password-123",
         )
+        other_registration = UserRegistration.objects.create(
+            username=other_user.username,
+            email=other_user.email,
+            password="test-password",
+            confirm_password="test-password",
+        )
+        other_profile = UserProfile.objects.create(user=other_registration)
         Post.objects.create(
             place="Ooty",
             caption="Someone else's post",
-            author=other_user,
+            author=other_profile,
         )
 
         response = self.client.get("/api/posts/mine/")

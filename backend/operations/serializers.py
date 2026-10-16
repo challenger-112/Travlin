@@ -18,6 +18,10 @@ class PostMediaSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
 
     author = serializers.StringRelatedField(read_only=True)
+    author_profile_picture = serializers.ImageField(
+        source="author.profile_picture",
+        read_only=True,
+    )
     media = serializers.ListField(
         child=serializers.FileField(),
         write_only=True,

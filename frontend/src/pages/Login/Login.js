@@ -32,10 +32,11 @@ function Login() {
         localStorage.setItem("username", data.user.username);
         localStorage.setItem("access_token", data.access);
         localStorage.setItem("refresh_token", data.refresh);
+        window.location.assign("/");
         window.dispatchEvent(new Event("auth-session-updated"));
         window.dispatchEvent(new Event("auth-token-updated"));
 
-        navigate("/");
+        // navigate("/");
     } catch (error) {
         console.error("Login error:", error);
         alert(

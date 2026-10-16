@@ -7,14 +7,20 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.throttling import AnonRateThrottle,UserRateThrottle
 
 from accounts.authentication import ActivityJWTAuthentication
+from accounts.models import UserProfile
 from operations.permissions import IsCommentUserOrReadOnly
 from operations.models import Post, Comment
 from operations.serializers import PostSerializer, CommentSerializer
 
+
+def get_user_profile(user):
+    return get_object_or_404(UserProfile, user__username=user.get_username())
+
+
 class PostList(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    authentication_classes = [ActivityJWTAuthentication]
-    throttle_classes = [AnonRateThrottle, UserRateThrottle]
+    authentication_classes = []
+    throttle_classes = []
 
     def get(self, request):
         posts = Post.objects.all()
@@ -31,7 +37,9 @@ class MyPosts(APIView):
     authentication_classes = [ActivityJWTAuthentication]
 
     def get(self, request):
-        posts = Post.objects.filter(author=request.user).order_by("-created_at")
+        posts = Post.objects.filter(
+            author__user__username=request.user.get_username()
+        ).order_by("-created_at")
         serializer = PostSerializer(posts, many=True, context={"request": request})
         return Response(serializer.data)
 
@@ -46,7 +54,7 @@ class AddPost(APIView):
             context={"request": request},
         )
         if serializer.is_valid():
-            post = serializer.save(author=request.user)
+            post = serializer.save(author=get_user_profile(request.user))
             response_serializer = PostSerializer(
                 post,
                 context={"request": request},
@@ -64,7 +72,7 @@ class PostOperations(APIView):
     def put(self, request, pk):
         post = get_object_or_404(Post, pk=pk)
         serializer = PostSerializer(post, data=request.data)
-        if request.user != post.author:
+        if request.user.get_username() != post.author.user.username:
             return Response({"detail": "You do not have permission to edit this post."}, status=status.HTTP_403_FORBIDDEN)
         if serializer.is_valid():
             serializer.save()
@@ -73,7 +81,7 @@ class PostOperations(APIView):
 
     def delete(self, request, pk):
         post = get_object_or_404(Post, pk=pk)
-        if request.user != post.author:
+        if request.user.get_username() != post.author.user.username:
             return Response({"detail": "You do not have permission to delete this post."}, status=status.HTTP_403_FORBIDDEN)
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -92,7 +100,7 @@ class PostComments(APIView):
         post = get_object_or_404(Post, pk=post_pk)
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(post=post, author=request.user)
+            serializer.save(post=post, author=get_user_profile(request.user))
             post.comments_count = post.comments.count()
             post.save(update_fields=["comments_count"])
             return Response(serializer.data, status=status.HTTP_201_CREATED)

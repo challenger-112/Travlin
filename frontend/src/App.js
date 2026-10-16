@@ -5,6 +5,7 @@ import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
 import Profile from "./pages/Profile/Profile";
 import Posts from "./pages/Posts/Posts";
+import AllPosts from "./pages/AllPosts/AllPosts";
 import SessionManager from "./services/SessionManager";
 import ProtectedRoute from "./services/protectedroute";
 
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />}/>
+        <Route path="/allposts" element={<AllPosts />}/>
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/posts" element={<ProtectedRoute><Posts /></ProtectedRoute>} />
       </Routes>

@@ -14,4 +14,7 @@ class IsCommentUserOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         else:
-            return obj.author == request.user or request.user.is_staff
+            return (
+                obj.author.user.username == request.user.get_username()
+                or request.user.is_staff
+            )
